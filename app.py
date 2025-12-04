@@ -25,6 +25,10 @@ MOONSHOT_BASE_URL = os.environ.get("MOONSHOT_BASE_URL", "https://api.moonshot.cn
 ALT_OPENAI_KEY = os.environ.get("OPENAI_API_KEY")
 ALT_OPENAI_MODEL = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
 ALT_OPENAI_BASE = os.environ.get("OPENAI_BASE_URL")
+# 在第 27 行之后添加
+GOOGLE_AI_API_KEY = os.environ.get("GOOGLE_AI_API_KEY", "AIzaSyBRLKap4ECROcdXwXsGB7JqJpvZePZKn8k")
+GOOGLE_AI_MODEL = os.environ.get("GOOGLE_AI_MODEL", "gemini-pro")
+GOOGLE_AI_BASE_URL = os.environ.get("GOOGLE_AI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta")
 
 KNOWLEDGE_BASE: Dict[str, Any] = {"concepts": []}
 
@@ -290,6 +294,10 @@ class LLMManager:
         if OpenAI and MOONSHOT_API_KEY:
             self.providers.append(("moonshot", self._call_moonshot))
 
+        # 在第 294 行之后添加
+        if OpenAI and GOOGLE_AI_API_KEY:
+            self.providers.append(("google", self._call_google_ai))
+
         if OpenAI and ALT_OPENAI_KEY:
             self.providers.append(("openai", self._call_openai))
 
@@ -304,15 +312,19 @@ class LLMManager:
             temperature=0.6,
         )
         return completion.choices[0].message.content
-
-    def _call_openai(self, messages: List[Dict[str, str]]) -> str:
-        client = OpenAI(api_key=ALT_OPENAI_KEY, base_url=ALT_OPENAI_BASE) if ALT_OPENAI_BASE else OpenAI(api_key=ALT_OPENAI_KEY)
+    # 在第 315 行（_call_openai 方法的 return 语句）之后添加
+    def _call_google_ai(self, messages: List[Dict[str, str]]) -> str:
+        client = OpenAI(
+            api_key=GOOGLE_AI_API_KEY,
+            base_url=f"{GOOGLE_AI_BASE_URL}/models/{GOOGLE_AI_MODEL}"
+        )
         completion = client.chat.completions.create(
-            model=ALT_OPENAI_MODEL,
+            model=GOOGLE_AI_MODEL,
             messages=messages,
             temperature=0.6,
         )
         return completion.choices[0].message.content
+
 
     def generate(self, messages: List[Dict[str, str]]) -> Tuple[str, str]:
         self.errors.clear()
@@ -484,3 +496,4 @@ def send_static(path):
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
