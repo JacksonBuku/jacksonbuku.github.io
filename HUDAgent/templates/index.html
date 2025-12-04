@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心流领航员 MindFlow Pilot</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">🧭</span>
+                    <h1>心流领航员</h1>
+                    <span class="logo-subtitle">MindFlow Pilot</span>
+                </div>
+                <button class="history-toggle" id="historyToggle" aria-label="Toggle history">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M12 7v5l4 2" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- History Sidebar -->
+            <aside class="history-sidebar" id="historySidebar">
+                <div class="sidebar-header">
+                    <h2>对话历史</h2>
+                    <button class="btn-icon" id="newChatBtn" title="新对话">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 5v14M5 12h14" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="history-list" id="historyList">
+                    <!-- History items will be dynamically inserted here -->
+                </div>
+            </aside>
+
+            <!-- Chat Container -->
+            <section class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="welcome-message">
+                        <div class="welcome-icon">🧠</div>
+                        <h2>欢迎来到心流学习空间</h2>
+                        <p>我是你的心流领航员，专注于管理你的认知负荷，引导你进入最佳学习状态。</p>
+                        <div class="welcome-cards">
+                            <div class="welcome-card">
+                                <span class="card-icon">🎯</span>
+                                <h3>智能引导</h3>
+                                <p>动态识别你的情绪和认知状态</p>
+                            </div>
+                            <div class="welcome-card">
+                                <span class="card-icon">💡</span>
+                                <h3>苏格拉底式对话</h3>
+                                <p>通过提问激发深度思考</p>
+                            </div>
+                            <div class="welcome-card">
+                                <span class="card-icon">📊</span>
+                                <h3>可视化分析</h3>
+                                <p>实时展示你的学习状态</p>
+                            </div>
+                        </div>
+                        <p class="welcome-prompt">告诉我你现在最想攻克或最头疼的学习难题...</p>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="chat-input-container">
+                    <div class="input-wrapper">
+                        <textarea id="userInput" placeholder="说出你的困惑、问题或想法..." rows="1"
+                            aria-label="User input"></textarea>
+                        <button class="send-btn" id="sendBtn" aria-label="Send message">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M22 2L11 13" />
+                                <path d="M22 2L15 22L11 13L2 9L22 2z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Panel -->
+            <aside class="analysis-panel" id="analysisPanel">
+                <div class="panel-header">
+                    <h2>🧠 思维分析</h2>
+                    <button class="panel-toggle" id="panelToggle" aria-label="Toggle panel">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M18 15l-6-6-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="panel-content" id="panelContent">
+                    <div class="analysis-section">
+                        <h3>Mind_Analysis</h3>
+                        <div class="analysis-item" id="detectResult">
+                            <span class="analysis-label">🔍 [Detect]</span>
+                            <div class="radar-container">
+                                <canvas id="radarChart" width="280" height="280"></canvas>
+                            </div>
+                            <div class="radar-legend">
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #FF6B6B;"></span>
+                                    <span>焦虑度</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #4ECDC4;"></span>
+                                    <span>认知负荷</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #FFE66D;"></span>
+                                    <span>挑战欲</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #A8E6CF;"></span>
+                                    <span>理解深度</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-color" style="background: #C7CEEA;"></span>
+                                    <span>参与度</span>
+                                </div>
+                            </div>
+                            <div class="analysis-text muted">等待分析...</div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-section">
+                        <h3>认知脉络</h3>
+                        <div class="analysis-grid">
+                            <div class="analysis-card" id="locateResult">
+                                <span class="analysis-label">🎯 Zone</span>
+                                <div class="analysis-text">等待分析...</div>
+                            </div>
+                            <div class="analysis-card" id="strategyResult">
+                                <span class="analysis-label">🧩 Strategy</span>
+                                <div class="analysis-text">等待分析...</div>
+                            </div>
+                            <div class="analysis-card" id="knowledgeResult">
+                                <span class="analysis-label">📚 Knowledge</span>
+                                <div class="analysis-text">等待分析...</div>
+                            </div>
+                            <div class="analysis-card" id="levelResult">
+                                <span class="analysis-label">📈 Level</span>
+                                <div class="analysis-text">等待分析...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="analysis-section">
+                        <h3>当前学习区</h3>
+                        <div class="zone-indicator" id="zoneIndicator">
+                            <div class="zone-badge zone-neutral">
+                                <span class="zone-icon">⏳</span>
+                                <span class="zone-name">等待中</span>
+                            </div>
+                        </div>
+                        <p class="zone-summary" id="zoneSummary">等待分析...</p>
+                    </div>
+
+                    <div class="analysis-section">
+                        <h3>状态脉冲</h3>
+                        <div class="state-timeline" id="stateTimeline">
+                            <span class="timeline-empty">还没有数据</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="/static/ai-engine.js"></script>
+    <script src="/static/app.js"></script>
+</body>
+
+</html>
